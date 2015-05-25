@@ -1,0 +1,29 @@
+{
+	"list":[
+		{
+			"name":"localhost",
+			"address":"127.0.0.1",
+			"port":30100
+		},
+		{
+			"name":"Test 1",
+			"address":"192.168.178.35",
+			"port":30100
+		},
+		{
+			"name":"5624564",
+			"address":"127.0.0.1",
+			"port":30000
+		},
+		{
+			"name":"abUFGUus",
+			"address":"127.0.0.1",
+			"port":30000
+		},
+		{
+			"name":"ABCDEFG 123",
+			"address":"127.0.0.1",
+			"port":30000
+		}
+	]
+}

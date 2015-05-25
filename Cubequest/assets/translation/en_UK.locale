@@ -1,0 +1,23 @@
+menu.main.play:Play
+menu.main.options:Settings
+menu.main.credits:Credits
+menu.play.singleplayer:Singleplayer
+menu.play.multiplayer:Multiplayer
+menu.play.back:back to main menu
+menu.options.apply:Apply
+menu.options.back:back to main menu
+menu.options.resolution:Resulution
+menu.connect.header:Connect to
+menu.connect.login:Sign in as
+menu.connect.login.done:~2Registration successful
+menu.connect.login.alreadyonserver:~cNickname already exists on server!
+menu.connect.login.timeout:~cServer gibt keine response!
+menu.connect.login.whitelist:~cDer Serverzugang wurde blockiert!
+menu.connect.login.full:~cDer Server ist voll!
+menu.connect.world:Weltdaten werden geladen
+menu.connect.world.done:~2Welt gefunden 
+menu.connect.world.canceled:~cAnfrage abgelehnt!
+menu.connect.world.load:Welt wird heruntergeladen
+menu.connect.world.load.progress:Chunk %1 von %2 heruntergeladen
+menu.connect.world.load.done:~2Herunterladen abgeschlossen
+menu.error.header:Es ist ein Fehler aufgetreten!
