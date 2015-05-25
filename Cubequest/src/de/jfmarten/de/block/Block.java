@@ -32,9 +32,9 @@ public class Block {
 	public static Block dirt = new Block(2, "dirt").setTextureCoords(2, 0);
 	public static Block grass = new Block(3, "grass").setTextureCoords(3, 0).setRenderMode(RenderMode.MANUEL);
 
-	public static Block tree_root = new Block(4, "grass").setTextureCoords(4, 0).setRenderMode(RenderMode.NORMAL).setSolid(false);
-	public static Block tree_main = new Block(5, "grass").setTextureCoords(5, 0).setRenderMode(RenderMode.NORMAL).setSolid(false);
-	public static Block tree_leaf = new Block(6, "grass").setTextureCoords(6, 0).setRenderMode(RenderMode.NORMAL).setSolid(false);
+	public static Block tree_root = new Block(4, "tree.root").setTextureCoords(4, 0).setSolid(false);
+	public static Block tree_main = new Block(5, "tree.main").setTextureCoords(5, 0).setSolid(false);
+	public static Block tree_leaf = new Block(6, "tree.leaf").setTextureCoords(6, 0).setSolid(false);
 
 	// Block ID 0 bis 255, jede ID darf nur einmal verwendet werden
 	public final int id;

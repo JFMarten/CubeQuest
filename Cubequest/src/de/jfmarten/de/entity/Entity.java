@@ -56,7 +56,7 @@ public class Entity {
 		if (!noPhysic) {
 			mY += delta * 0.01f;
 			if ((jumpDuration -= delta) > 0) {
-				mY -= delta * 0.001f * jumpDuration;
+				mY -= delta * 0.0003f * jumpDuration;
 			} else {
 				jumpDuration = 0;
 			}
@@ -91,7 +91,7 @@ public class Entity {
 
 		ArrayList<AABB> aabbs = world.getAABBs(dir);
 		for (AABB aabb : aabbs) {
-			aabb.render(Color.BLUE);
+			//aabb.render(Color.BLUE);
 			mY = aabb.clipYCollide(currentBox, mY);
 		}
 
