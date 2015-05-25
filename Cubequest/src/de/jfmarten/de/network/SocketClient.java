@@ -135,12 +135,14 @@ public class SocketClient implements Runnable {
 			PacketEntityUpdate p = new PacketEntityUpdate();
 			p.set(s);
 			Entity e = world.entities.get(p.entityID);
-			if (e != null) {
-				e.x = p.x;
-				e.y = p.y;
-				world.entities.put(p.entityID, e);
-			} else {
-				world.addEntity(Entity.create(world, p));
+			if (world.playerEntity != null && !p.entityID.equals(world.playerEntity.id)) {
+				if (e != null) {
+					e.netPosition(p.x, p.y);
+					e.noPhysic = true;
+					world.entities.put(p.entityID, e);
+				} else {
+					world.addEntity(Entity.create(world, p));
+				}
 			}
 		} else {
 			packets.add(dp);

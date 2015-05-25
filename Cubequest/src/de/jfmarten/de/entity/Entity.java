@@ -15,6 +15,8 @@ public class Entity {
 	public String id = "";
 
 	public float x = 20, y = 20;
+	public float aX = 0, aY = 0;
+	public float oX = 0, oY = 0;
 	public float mX = 0, mY = 0;
 
 	public long jumpDuration = 0;
@@ -25,6 +27,8 @@ public class Entity {
 	public long nextNetUpdate = 0;
 
 	public boolean onGround = false;
+
+	public boolean noPhysic = false;
 
 	public static Entity create(World w, PacketEntityUpdate p) {
 		Entity e = new Entity(w, p.entityID);
@@ -46,17 +50,23 @@ public class Entity {
 	}
 
 	public void update(long delta) {
+		currentBox = collisionBox.move(x, y);
+		currentBox.render(Color.GREEN);
 		nextNetUpdate -= delta;
-		mY += delta * 0.01f;
-		if ((jumpDuration -= delta) > 0) {
-			mY -= delta * 0.001f * jumpDuration;
-		} else {
-			jumpDuration = 0;
-		}
+		if (!noPhysic) {
+			mY += delta * 0.01f;
+			if ((jumpDuration -= delta) > 0) {
+				mY -= delta * 0.001f * jumpDuration;
+			} else {
+				jumpDuration = 0;
+			}
 
-		move(mX, mY);
+			move(mX, mY);
+		} else {
+
+		}
 		if (nextNetUpdate < 0) {
-			nextNetUpdate = 300;
+			nextNetUpdate = 100;
 		}
 	}
 
@@ -67,6 +77,11 @@ public class Entity {
 		p.remove = false;
 		p.entityID = id;
 		world.client.sendPacket(p);
+	}
+
+	public void netPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	public void move(float mX, float mY) {
