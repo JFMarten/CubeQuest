@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import de.jfmarten.de.AABB;
 import de.jfmarten.de.CubeQuest;
+import de.jfmarten.de.Log;
 import de.jfmarten.de.block.Block;
 import de.jfmarten.de.network.entity.NetEntity;
 import de.jfmarten.de.world.Chunk;
@@ -30,7 +31,7 @@ public class NetWorld {
 			return loaded.get(x + "_" + y);
 		}
 		Chunk c = new Chunk(x, y);
-		c.load(new File(path, "chunk_" + x + "_" + y),this);
+		c.load(new File(path, "chunk_" + x + "_" + y), this);
 		loaded.put(x + "_" + y, c);
 		return c;
 	}
@@ -88,17 +89,21 @@ public class NetWorld {
 		entities.add(e);
 	}
 
-	public void setBlock(int i, int x, int y) throws IOException {
+	public void setBlockW(int i, int x, int y) throws IOException {
 		if (x < 0 || y < 0) {
 			return;
 		}
 		int cX = x / 32;
 		int cY = y / 32;
 		if (loaded.containsKey(cX + "_" + cY)) {
-			loaded.get(cX + "_" + cY).blocks[(y % 32) * 32 + (x % 32)] = (byte) i;
+			Chunk c = loaded.get(cX + "_" + cY);
+			c.blocks[(y % 32) * 32 + (x % 32)] = (byte) i;
+			loaded.put(cX + "_" + cY, c);
 		} else {
 			Chunk c = getChunk(cX, cY);
 			c.blocks[(y % 32) * 32 + (x % 32)] = (byte) i;
+			loaded.put(cX + "_" + cY, c);
 		}
+		Log.i(this, "SET ");
 	}
 }

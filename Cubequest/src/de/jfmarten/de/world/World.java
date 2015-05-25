@@ -13,6 +13,7 @@ import de.jfmarten.de.AABB;
 import de.jfmarten.de.CubeQuest;
 import de.jfmarten.de.KeyConfig;
 import de.jfmarten.de.Log;
+import de.jfmarten.de.Vec2;
 import de.jfmarten.de.block.Block;
 import de.jfmarten.de.block.Block.RenderMode;
 import de.jfmarten.de.entity.Entity;
@@ -25,6 +26,7 @@ public class World {
 	public int width, height;
 
 	public float scrollX = 0, scrollY = 0;
+	public float mouseX, mouseY;
 
 	public HashMap<String, Chunk> loaded = new HashMap<String, Chunk>();
 	public ArrayList<String> order = new ArrayList<String>();
@@ -72,6 +74,31 @@ public class World {
 		Render.glRenderEnd();
 		Render.glClear();
 
+		int[] m = CubeQuest.getMouse();
+		mouseX = m[0] / CubeQuest.BLOCKSIZE + scrollX;
+		mouseY = m[1] / CubeQuest.BLOCKSIZE + scrollY;
+
+		Vec2 sel = this.getBlockInRay(new Vec2(playerEntity.x, playerEntity.y), new Vec2(mouseX, mouseY), 20, 10);
+
+		if (Block.list[getBlockTyp((int) mouseX, (int) mouseY)].id != Block.air.id) {
+			Render.glColor(1f, 1f, 1f, 0.1f);
+			Render.glRenderQuads();
+			{
+				Render.glVertex2f((int) mouseX - scrollX, (int) mouseY - scrollY);
+				Render.glVertex2f((int) mouseX - scrollX + 1, (int) mouseY - scrollY);
+				Render.glVertex2f((int) mouseX - scrollX + 1, (int) mouseY - scrollY + 1);
+				Render.glVertex2f((int) mouseX - scrollX, (int) mouseY - scrollY + 1);
+
+				Render.glColor(1f, 0f, 0f, 0.1f);
+
+				Render.glVertex2f((int) sel.x - scrollX, (int) sel.y - scrollY);
+				Render.glVertex2f((int) sel.x - scrollX + 1, (int) sel.y - scrollY);
+				Render.glVertex2f((int) sel.x - scrollX + 1, (int) sel.y - scrollY + 1);
+				Render.glVertex2f((int) sel.x - scrollX, (int) sel.y - scrollY + 1);
+			}
+			Render.glRenderEnd();
+		}
+
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-scrollX, -scrollY, 0);
 		for (Entity e : entities.values()) {
@@ -94,7 +121,7 @@ public class World {
 				mX += 0.005f * delta;
 			}
 			if (Keyboard.isKeyDown(KeyConfig.KEY_UP) && playerEntity.onGround) {
-				playerEntity.jumpDuration = 100;
+				playerEntity.jumpDuration = 175;
 			}
 			playerEntity.mX = mX;
 			playerEntity.mY = mY;
@@ -176,6 +203,21 @@ public class World {
 			}
 		}
 		return list;
+	}
+
+	public Vec2 getBlockInRay(Vec2 from, Vec2 to, float parts, float max) {
+		float x = (from.x - to.x);
+		float y = (from.y - to.y);
+		float len = (float) Math.sqrt(x * x + y * y);
+		x /= parts;
+		y /= parts;
+		for (int i = 0; i < parts; i++) {
+			int j = getBlockTyp((int) (from.x - x * i), (int) (from.y - y * i));
+			if (Block.air.id != j) {
+				return new Vec2((int) (from.x - x * i), (int) (from.y - y * i));
+			}
+		}
+		return to;
 	}
 
 	public Entity getEntity(String id) {
