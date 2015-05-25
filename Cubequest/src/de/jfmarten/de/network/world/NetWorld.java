@@ -30,7 +30,7 @@ public class NetWorld {
 			return loaded.get(x + "_" + y);
 		}
 		Chunk c = new Chunk(x, y);
-		c.load(new File(path, "chunk_" + x + "_" + y));
+		c.load(new File(path, "chunk_" + x + "_" + y),this);
 		loaded.put(x + "_" + y, c);
 		return c;
 	}
@@ -86,5 +86,19 @@ public class NetWorld {
 
 	public void addEntity(NetEntity e) {
 		entities.add(e);
+	}
+
+	public void setBlock(int i, int x, int y) throws IOException {
+		if (x < 0 || y < 0) {
+			return;
+		}
+		int cX = x / 32;
+		int cY = y / 32;
+		if (loaded.containsKey(cX + "_" + cY)) {
+			loaded.get(cX + "_" + cY).blocks[(y % 32) * 32 + (x % 32)] = (byte) i;
+		} else {
+			Chunk c = getChunk(cX, cY);
+			c.blocks[(y % 32) * 32 + (x % 32)] = (byte) i;
+		}
 	}
 }

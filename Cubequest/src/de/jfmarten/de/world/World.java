@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.opengl.Texture;
 
 import de.jfmarten.de.AABB;
 import de.jfmarten.de.CubeQuest;
@@ -37,6 +38,18 @@ public class World {
 	}
 
 	public void render() throws FileNotFoundException, IOException {
+		Render.glColor(1, 1, 1);
+		Texture tex = Render.glBindTexture("assets/menu.png");
+		Render.setTextureNearest();
+		Render.glRenderQuads();
+		{
+			Render.glVertexUV2f(0, 0, 0, 0);
+			Render.glVertexUV2f(CubeQuest.GAME_WIDTH / CubeQuest.BLOCKSIZE, 0, tex.getWidth(), 0);
+			Render.glVertexUV2f(CubeQuest.GAME_WIDTH / CubeQuest.BLOCKSIZE, 108f / 192f * (CubeQuest.GAME_WIDTH / CubeQuest.BLOCKSIZE), tex.getWidth(), tex.getHeight());
+			Render.glVertexUV2f(0, 108f / 192f * (CubeQuest.GAME_WIDTH / CubeQuest.BLOCKSIZE), 0, tex.getHeight());
+		}
+		Render.glRenderEnd();
+
 		Render.glClear();
 		Render.glBindTexture("assets/blocks.png");
 		Render.setTextureNearest();
@@ -49,8 +62,10 @@ public class World {
 				Block b = Block.list[t];
 				if (b.getRenderMode() == RenderMode.TRANSPARENT) {
 
-				} else {
+				} else if (b.getRenderMode() == RenderMode.NORMAL) {
 					Block.render((byte) t, i - (scrollX % 1), j - (scrollY % 1));
+				} else if (b.getRenderMode() == RenderMode.MANUEL) {
+					b.render(i - (scrollX % 1), j - (scrollY % 1));
 				}
 			}
 		}

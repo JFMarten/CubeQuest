@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import de.jfmarten.de.block.Block;
 import de.jfmarten.de.network.packet.PacketWorldData;
+import de.jfmarten.de.network.world.NetWorld;
 import de.jfmarten.de.network.world.NetWorldGenerator;
 
 public class Chunk {
@@ -37,7 +37,7 @@ public class Chunk {
 	 *            Path des Chunks
 	 * @throws IOException
 	 */
-	public void load(File path) throws IOException {
+	public void load(File path,NetWorld nw) throws IOException {
 		if (path.exists()) {
 			InputStream is = new FileInputStream(path);
 			BufferedInputStream br = new BufferedInputStream(is);
@@ -53,8 +53,8 @@ public class Chunk {
 			br.close();
 		} else {
 			path.createNewFile();
-			generate(path);
-			load(path);
+			generate(path,nw);
+			load(path,nw);
 		}
 	}
 
@@ -81,8 +81,8 @@ public class Chunk {
 	 *            Pfad des Chunks
 	 * @throws IOException
 	 */
-	public void generate(File path) throws IOException {
-		NetWorldGenerator.generate(this);
+	public void generate(File path, NetWorld nw) throws IOException {
+		NetWorldGenerator.generate(this, nw);
 		save(path);
 	}
 }

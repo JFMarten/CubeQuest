@@ -1,8 +1,11 @@
 package de.jfmarten.de.block;
 
+import java.awt.Color;
+
 import org.lwjgl.opengl.GL11;
 
 import de.jfmarten.de.AABB;
+import de.jfmarten.de.render.Render;
 
 public class Block {
 
@@ -27,8 +30,11 @@ public class Block {
 	public static Block air = new Block(0, "air").setTextureCoords(0, 0).setRenderMode(RenderMode.TRANSPARENT).setSolid(false);
 	public static Block stone = new Block(1, "stone").setTextureCoords(1, 0);
 	public static Block dirt = new Block(2, "dirt").setTextureCoords(2, 0);
-	public static Block grass = new Block(3, "grass").setTextureCoords(3, 0);
-	// TODO Neue Blöcke einfügen
+	public static Block grass = new Block(3, "grass").setTextureCoords(3, 0).setRenderMode(RenderMode.MANUEL);
+
+	public static Block tree_root = new Block(4, "grass").setTextureCoords(4, 0).setRenderMode(RenderMode.NORMAL).setSolid(false);
+	public static Block tree_main = new Block(5, "grass").setTextureCoords(5, 0).setRenderMode(RenderMode.NORMAL).setSolid(false);
+	public static Block tree_leaf = new Block(6, "grass").setTextureCoords(6, 0).setRenderMode(RenderMode.NORMAL).setSolid(false);
 
 	// Block ID 0 bis 255, jede ID darf nur einmal verwendet werden
 	public final int id;
@@ -136,8 +142,12 @@ public class Block {
 	/**
 	 * Manuele Rendermethode
 	 */
-	public void render() {
-
+	public void render(float x, float y) {
+		Render.glColor(Color.WHITE);
+		Block.render((byte) Block.dirt.id, x, y);
+		Render.glColor(Color.GREEN);
+		Block.render((byte) Block.grass.id, x, y);
+		Render.glColor(Color.WHITE);
 	}
 
 	/**
