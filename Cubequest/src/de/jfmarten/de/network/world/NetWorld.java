@@ -25,6 +25,7 @@ public class NetWorld {
 	public ArrayList<NetEntity> entities = new ArrayList<NetEntity>();
 
 	public Chunk getChunk(int x, int y) throws IOException {
+		new File(path).mkdirs();
 		if (loaded.containsKey(x + "_" + y)) {
 			return loaded.get(x + "_" + y);
 		}
