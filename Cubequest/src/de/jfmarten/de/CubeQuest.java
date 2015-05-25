@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -34,6 +36,9 @@ public class CubeQuest implements SocketClientListener {
 
 	// Blockgröße in GAME-Einheiten
 	public static float BLOCKSIZE = 32;
+
+	// DEBUG
+	public boolean debug = true;
 
 	// Fenstergröße
 	public static int WIDTH = 1000, HEIGHT = 800;
@@ -123,12 +128,14 @@ public class CubeQuest implements SocketClientListener {
 				render();
 			} catch (Exception e) {
 				gui = new GuiError(this, e);
+				e.printStackTrace();
 			}
 			// Update
 			try {
 				update(delta);
 			} catch (Exception e) {
 				gui = new GuiError(this, e);
+				e.printStackTrace();
 			}
 
 			// Fenster aktualisieren
@@ -140,14 +147,16 @@ public class CubeQuest implements SocketClientListener {
 
 		Log.i(this, "Shuting down...");
 		client.stop();
-		server.stop();
+		if (server != null)
+			server.stop();
 
 		// Ablauf nach schließen des Fensters (evnt. speichern...)
 		// Fenster zerstören
 		try {
 			Thread.sleep(150);
 			clientThread.join();
-			serverThread.join();
+			if (server != null)
+				serverThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -205,21 +214,29 @@ public class CubeQuest implements SocketClientListener {
 		// Fontrender für Texte
 		Render.fontRender = new FontRender("assets/font.png");
 		int i = 0;
-		while (server == null) {
-			try {
-				server = new SocketServer(SERVER_PORT + i);
-			} catch (Exception e) {
-				i++;
+		if (debug) {
+			if (JOptionPane.showConfirmDialog(null, "SERVER ?") == JOptionPane.OK_OPTION) {
+				while (server == null) {
+					try {
+						server = new SocketServer(SERVER_PORT + i);
+					} catch (Exception e) {
+						i++;
+					}
+				}
+			} else {
+				server = null;
 			}
 		}
 		client = new SocketClient(this);
 
 		Server.loadServerList();
 
-		serverThread = new Thread(server, "Server");
+		if (server != null)
+			serverThread = new Thread(server, "Server");
 		clientThread = new Thread(client, "Client");
 
-		serverThread.start();
+		if (server != null)
+			serverThread.start();
 		clientThread.start();
 
 		gui = new GuiMain(this);

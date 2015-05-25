@@ -34,6 +34,7 @@ public class Entity {
 		}
 		e.x = p.x;
 		e.y = p.y;
+		e.id = p.entityID;
 		return e;
 	}
 
@@ -46,7 +47,7 @@ public class Entity {
 	}
 
 	public void update(long delta) {
-		nextNetUpdate -= delta;
+		nextNetUpdate -= 1;
 		mY += delta * 0.01f;
 		if ((jumpDuration -= delta) > 0) {
 			mY -= delta * 0.001f * jumpDuration;
@@ -56,7 +57,7 @@ public class Entity {
 
 		move(mX, mY);
 		if (nextNetUpdate < 0) {
-			nextNetUpdate = 300;
+			nextNetUpdate = 1000;
 		}
 	}
 

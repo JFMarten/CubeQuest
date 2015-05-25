@@ -14,7 +14,7 @@ public class PacketEntityUpdate extends Packet {
 
 	@Override
 	public String getString() {
-		return id + ":" + entityID + ":" + x + ":" + y + ":" + (remove ? 1 : 0)+":";
+		return id + ":" + entityID + ":" + x + ":" + y + ":" + (remove ? 1 : 0) + ":";
 	}
 
 	@Override
@@ -22,11 +22,11 @@ public class PacketEntityUpdate extends Packet {
 		String[] ss = s.split(":");
 		try {
 			entityID = ss[1];
-			x = Integer.parseInt(ss[2]);
-			y = Integer.parseInt(ss[3]);
+			x = Float.parseFloat(ss[2]);
+			y = Float.parseFloat(ss[3]);
 			remove = (ss[4].equals("1"));
 		} catch (Exception e) {
-			throw new PacketParseException(this, s);
+			throw new PacketParseException(this, s, e);
 		}
 	}
 
