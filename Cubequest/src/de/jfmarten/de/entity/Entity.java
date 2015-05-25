@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import de.jfmarten.de.AABB;
 import de.jfmarten.de.network.packet.PacketEntityUpdate;
+import de.jfmarten.de.render.Render;
 import de.jfmarten.de.world.World;
 
 public class Entity {
@@ -26,28 +27,26 @@ public class Entity {
 	public boolean onGround = false;
 
 	public static Entity create(World w, PacketEntityUpdate p) {
-		Entity e = null;
-		if (p.entityID.startsWith("player")) {
-			e = new EntityPlayer(w);
-		} else {
-			e = new Entity(w);
-		}
+		Entity e = new Entity(w, p.entityID);
 		e.x = p.x;
 		e.y = p.y;
-		e.id = p.entityID;
 		return e;
 	}
 
-	public Entity(World w) {
+	public Entity(World w, String i) {
 		world = w;
+		id = i;
+		if (id.equals("")) {
+			id = genID();
+		}
 	}
 
 	public void render() {
-
+		Render.drawString("~0" + id, x, y - 2f, 0, 0.4f);
 	}
 
 	public void update(long delta) {
-		nextNetUpdate -= 1;
+		nextNetUpdate -= delta;
 		mY += delta * 0.01f;
 		if ((jumpDuration -= delta) > 0) {
 			mY -= delta * 0.001f * jumpDuration;
@@ -57,7 +56,7 @@ public class Entity {
 
 		move(mX, mY);
 		if (nextNetUpdate < 0) {
-			nextNetUpdate = 1000;
+			nextNetUpdate = 300;
 		}
 	}
 

@@ -5,8 +5,7 @@ import de.jfmarten.de.world.World;
 public class EntityPlayer extends Entity{
 
 	public EntityPlayer(World w) {
-		super(w);
-		id = "player_"+Entity.genID();
+		super(w,"player_"+Entity.genID());
 	}
 
 }

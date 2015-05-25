@@ -134,14 +134,11 @@ public class SocketClient implements Runnable {
 		} else if (ss[0].equals("6")) {
 			PacketEntityUpdate p = new PacketEntityUpdate();
 			p.set(s);
-			Entity e = world.getEntity(p.entityID);
+			Entity e = world.entities.get(p.entityID);
 			if (e != null) {
-				if (p.remove) {
-					world.removeEntity(e);
-				} else {
-					e.x = p.x;
-					e.y = p.y;
-				}
+				e.x = p.x;
+				e.y = p.y;
+				world.entities.put(p.entityID, e);
 			} else {
 				world.addEntity(Entity.create(world, p));
 			}

@@ -181,7 +181,7 @@ public class SocketServer implements Runnable {
 
 	public void sendAllW(Packet p, Client cc) {
 		for (Client c : clients) {
-			if (c != cc)
+			if (!c.username.equals(cc.username))
 				sendPacket(p, c);
 		}
 	}

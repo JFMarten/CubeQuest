@@ -28,8 +28,8 @@ public class World {
 	public HashMap<String, Chunk> loaded = new HashMap<String, Chunk>();
 	public ArrayList<String> order = new ArrayList<String>();
 	public SocketClient client;
-	public ArrayList<Entity> entities = new ArrayList<Entity>();
-	public ArrayList<Entity> remove = new ArrayList<Entity>();
+	public HashMap<String, Entity> entities = new HashMap<String, Entity>();
+	public ArrayList<String> remove = new ArrayList<String>();
 	public Entity playerEntity;
 
 	public World(SocketClient c) {
@@ -56,6 +56,13 @@ public class World {
 		}
 		Render.glRenderEnd();
 		Render.glClear();
+
+		GL11.glPushMatrix();
+		GL11.glTranslatef(-scrollX, -scrollY, 0);
+		for (Entity e : entities.values()) {
+			e.render();
+		}
+		GL11.glPopMatrix();
 	}
 
 	public void update(long delta) {
@@ -93,13 +100,13 @@ public class World {
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-scrollX, -scrollY, 0);
-		for (Entity e : entities) {
+		for (Entity e : entities.values()) {
 			e.update(delta);
 		}
 		GL11.glPopMatrix();
 
-		for (Entity e : remove) {
-			if (entities.contains(e))
+		for (String e : remove) {
+			if (entities.containsKey(e))
 				entities.remove(e);
 		}
 		remove.clear();
@@ -157,19 +164,18 @@ public class World {
 	}
 
 	public Entity getEntity(String id) {
-		for (Entity e : entities) {
-			if (e.id.equals(id)) {
-				return e;
-			}
+		if (entities.containsKey(id)) {
+			return entities.get(id);
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 	public void addEntity(Entity e) {
-		entities.add(e);
+		entities.put(e.id, e);
 	}
 
 	public void removeEntity(Entity e) {
-		remove.add(e);
+		remove.add(e.id);
 	}
 }
